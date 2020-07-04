@@ -107,6 +107,33 @@ var longestPalindromeDP = function (s) {
     return s.substr(startIdx, maxSize);
 };
 
+var longestPalindromeCE = function (s) {
+    let maxSize = 1, startIdx = 0;
+    const expandAroundCenter = (left, right) => {
+        while (left >= 0 && right < s.length) {
+            // console.log(left, right)
+            if (s[left] === s[right]) {
+                left--;
+                right++;
+            } else {
+                break;
+            }
+        }
+        const size = (right - 1) - (left + 1) + 1;
+        // console.log(left, right, size);
+        if (size > maxSize) {
+            maxSize = size;
+            startIdx = left + 1;
+        }
+    };
+
+    for (let j = 0; j < s.length - 1; j++) {
+        expandAroundCenter(j, j);
+        expandAroundCenter(j, j + 1);
+    }
+    return s.substr(startIdx, maxSize);
+};
+
 // S = "abacdfgdcaba", S′ = "abacdgfdcaba".
 // To rectify this, each time we find a longest common substring candidate, we check if the substring’s indices are the same as the reversed substring’s original indices.
 // If it is, then we attempt to update the longest palindrome found so far; if not, we skip this and find the next candidate.
@@ -150,16 +177,19 @@ let str = 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 // str = 'babadabad';
 // str = 'babdba';
 // str = 'a';
+str = 'bb';
 // const result = longestPalindrome(str);
 // const result2 = longestPalindrome2(str);
 // console.log('result', result, result);
 
 const {analyse} = require('../util/time-helper');
-const result = analyse(longestPalindrome, str);
-console.log('result1', result);
-const result2 = analyse(longestPalindrome2, str);
-console.log('result2', result2);
-const result3 = analyse(longestPalindromeLCS2D, str);
-console.log('result3', result3);
+// const result = analyse(longestPalindrome, str);
+// console.log('result1', result);
+// const result2 = analyse(longestPalindrome2, str);
+// console.log('result2', result2);
+// const result3 = analyse(longestPalindromeLCS2D, str);
+// console.log('result3', result3);
 const result4 = analyse(longestPalindromeDP, str);
 console.log('result4', result4);
+const result5 = analyse(longestPalindromeCE, str);
+console.log('result5', result5);
