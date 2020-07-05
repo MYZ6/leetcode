@@ -70,10 +70,45 @@ var convert = function (s, numRows) {
     return result;
 };
 
+/**
+ * @param {string} s
+ * @param {number} numRows
+ * @return {string}
+ */
+var convert2 = function (s, numRows) {
+    if (numRows === 1) {
+        return s;
+    }
+    const rows = [];
+    for (let i = 0; i < numRows; i++) {
+        rows[i] = '';
+    }
+
+    let direction = 'down', currentRow = 0;
+    for (let i = 0; i < s.length; i++) {
+        rows[currentRow] += s[i];
+        if (direction === 'down') {
+            currentRow++;
+        } else {
+            currentRow--;
+        }
+        if (currentRow === numRows - 1) {
+            direction = 'up'
+        } else if (currentRow === 0) {
+            direction = 'down'
+        }
+        // console.log(currentRow);
+    }
+
+    return rows.join('');
+};
+
 // https://leetcode-cn.com/problems/zigzag-conversion/solution/ji-ben-gui-lu-by-liyzh/
 
 const {analyse} = require('../util/time-helper');
-let str = 'PAYPALISHIRING', r = 3;
-str = 'A', r = 3;
+let str = 'PAYPALISHIRING', r = 4;
+// str = 'A', r = 3;
 const result = analyse(convert, str, r);
 console.log('result1', result);
+const result2 = analyse(convert2, str, r);
+console.log('result2', result2);
