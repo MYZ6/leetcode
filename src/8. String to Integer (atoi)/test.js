@@ -87,14 +87,59 @@ var myAtoi = function (str) {
     }
     return x;
 };
+var myAtoi2 = function (str) {
+    let index = 0;
+    while (str[index] === ' ') {
+        index++;
+    }
+    let sign = 1;
+    if (str[index] === '+' || str[index] === '-') {
+        if (str[index] === '-') {
+            sign = -1;
+        }
+        index++;
+    }
+    let total = 0;
+    const min = Math.pow(-2, 31);
+    const max = Math.pow(2, 31) - 1;
+    while (index < str.length) {
+        if (str[index] === ' ') {
+            break;
+        }
+        const digit = str[index] - '0';
+        if (Number.isNaN(digit)) {
+            break;
+        }
+        const temp = total * 10 + digit;
+        if (temp > max) {
+            if (sign === 1) {
+                return max;
+            } else {
+                return min;
+            }
+        } else {
+            total = temp;
+        }
+
+        index++;
+    }
+
+    return sign * total;
+};
 // 2147483647
 // 9646324351
 const {analyse} = require('../util/time-helper');
 let str = "42";
 // str = "   -42";
-str = "+1";
-// str = "4193 with words";
+// str = "+1";
+str = "4193 with words";
 // str = "words and 987";
-// str = "-91283472332";
+str = "-91283472332";
+// str = "-2147483645";
 const result = analyse(myAtoi, str);
+const result2 = analyse(myAtoi2, str);
 console.log('result1', result);
+console.log('result2', result2);
+
+console.log(typeof ('9' - '0'), typeof '9', typeof 9);
+console.log('9' - '0', 'a' - '0');
