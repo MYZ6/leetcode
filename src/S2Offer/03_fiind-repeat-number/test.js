@@ -32,7 +32,23 @@ function findRepeatNumber(nums) {
     return null;
 }
 
+function findRepeatNumber_swap(nums) {
+    for (let i = 0; i < nums.length; i++) {
+        while (nums[i] !== i) { // 不停地原地置换，直到下标与数字对应为止
+            const num = nums[i];
+            if (num === nums[num]) {
+                return num;
+            }
+            nums[i] = nums[num];
+            nums[num] = num;
+        }
+    }
+    return null;
+}
+
+
 const nums = [2, 3, 1, 0, 2, 5, 3];
-const result = findRepeatNumber(nums);
+// const result = findRepeatNumber(nums);
+const result = findRepeatNumber_swap(nums);
 console.log(result);
 
