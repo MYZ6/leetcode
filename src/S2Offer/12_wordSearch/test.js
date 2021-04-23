@@ -44,18 +44,11 @@ var exist = function (board, word) {
     // if (board[0].length === 0) {
     //     return false;
     // }
-    const trace = [];
     const rowNum = board.length, colNum = board[0].length, wSize = word.length;
-    for (let i = 0; i < rowNum; i++) {
-        const trow = [];
-        for (let j = 0; j < colNum; j++) {
-            trow.push(false);
-        }
-        trace.push(trow);
-    }
     let counter = 0;
-    const search = (rowIdx, colIdx, wIdx) => {
-        console.log(rowIdx, colIdx, wIdx)
+    const search = (rowIdx, colIdx, wIdx, level = 0) => {
+        // console.log(rowIdx, colIdx, wIdx, level)
+        // console.log(board)
         counter++;
         if (counter > 20) {
             // return false;
@@ -63,19 +56,21 @@ var exist = function (board, word) {
         if (rowIdx < 0 || colIdx < 0 || rowIdx > rowNum - 1 || colIdx > colNum - 1) {
             return false;
         }
-        if (trace[rowIdx][colIdx]) {
-            return false;
-        }
         const char = board[rowIdx][colIdx];
         const char2 = word[wIdx];
         if (char === char2) {
-            console.log(char)
-            trace[rowIdx][colIdx] = true;
-            wIdx++;
+            // console.log(char)
             if (wIdx === wSize - 1) {
+                console.log(wIdx, wSize, char)
                 return true;
             }
-            return search(rowIdx--, colIdx, wIdx) || search(rowIdx, colIdx++, wIdx) || search(rowIdx++, colIdx, wIdx) || search(rowIdx, colIdx--, wIdx); // 上右下左依次寻找
+            wIdx++;
+            level++;
+            board[rowIdx][colIdx] = ''; // 进入下级递归前，标记访问状态
+            const result = search(rowIdx - 1, colIdx, wIdx, level) || search(rowIdx, colIdx + 1, wIdx, level)
+                || search(rowIdx + 1, colIdx, wIdx, level) || search(rowIdx, colIdx - 1, wIdx, level); // 上右下左依次寻找
+            board[rowIdx][colIdx] = char; // restore value
+            return result;
         }
         return false;
     }
@@ -89,7 +84,8 @@ var exist = function (board, word) {
     return false;
 };
 
-const board = [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]], word = "ABCCED";
+// const board = [["A", "B", "C", "C"], ["S", "C", "C", "S"], ["A", "F", "E", "E"]], word = "BCF";
+const board = [["C", "A", "A"], ["A", "A", "A"], ["B", "C", "D"]], word = "AAB";
 // const board = [["a", "b"], ["c", "d"]], word = "abcd";
 let result = exist(board, word);
 console.log(result);
